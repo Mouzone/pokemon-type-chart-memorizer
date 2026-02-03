@@ -6,10 +6,18 @@
 
 td[data-value="2"] {
 	background-color: var(--super-effective);
+	color: rgb(255, 221, 87);
 }
 td[data-value="0.5"] {
 	background-color: var(--not-effective);
+	color: rgb(255, 221, 87);
 }
 td[data-value="0"] {
 	background-color: var(--immune);
+	color: rgb(255, 221, 87);
+}
+
+th,
+tr {
+	text-align: center;
 }
