@@ -6,6 +6,8 @@ const types = Object.keys(multipliers);
 
 const header = document.createElement("tr");
 const th = document.createElement("th");
+th.className = "corner-cell";
+th.innerText = "DEFENSE →\nATTACK ↴";
 header.appendChild(th);
 types.forEach((type) => {
 	const th = document.createElement("th");
