@@ -1,8 +1,19 @@
 import multipliers from "./multipliers.json" with { type: "json" };
 
 const tbody = document.querySelector("tbody");
-
+const thead = document.querySelector("thead");
 const types = Object.keys(multipliers);
+
+const header = document.createElement("tr");
+const th = document.createElement("th");
+header.appendChild(th);
+types.forEach((type) => {
+	const th = document.createElement("th");
+	th.textContent = type.slice(0, 3);
+	th.setAttribute("data-type", type);
+	header.appendChild(th);
+});
+thead.appendChild(header);
 
 types.forEach((attack) => {
 	const row = document.createElement("tr");
