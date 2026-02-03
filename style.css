@@ -10,3 +10,6 @@ td[data-value="2"] {
 td[data-value="0.5"] {
 	background-color: var(--not-effective);
 }
+td[data-value="0"] {
+	background-color: var(--immune);
+}
