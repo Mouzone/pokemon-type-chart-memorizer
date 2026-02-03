@@ -171,6 +171,6 @@ td {
 	margin: 0;
 }
 
-td[data-row][data-col] {
+td {
 	border: 1px solid lightgray;
 }
