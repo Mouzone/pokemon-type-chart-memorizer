@@ -1,3 +1,142 @@
+/* Thin */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 100;
+	src: url("Fira_Sans/FiraSans-Thin.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 100;
+	src: url("Fira_Sans/FiraSans-ThinItalic.ttf") format("truetype");
+}
+
+/* Extra Light */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 200;
+	src: url("Fira_Sans/FiraSans-ExtraLight.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 200;
+	src: url("Fira_Sans/FiraSans-ExtraLightItalic.ttf") format("truetype");
+}
+
+/* Light */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 300;
+	src: url("Fira_Sans/FiraSans-Light.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 300;
+	src: url("Fira_Sans/FiraSans-LightItalic.ttf") format("truetype");
+}
+
+/* Regular */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 400;
+	src: url("Fira_Sans/FiraSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 400;
+	src: url("Fira_Sans/FiraSans-Italic.ttf") format("truetype");
+}
+
+/* Medium */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 500;
+	src: url("Fira_Sans/FiraSans-Medium.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 500;
+	src: url("Fira_Sans/FiraSans-MediumItalic.ttf") format("truetype");
+}
+
+/* Semi-bold */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 600;
+	src: url("Fira_Sans/FiraSans-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 600;
+	src: url("Fira_Sans/FiraSans-SemiBoldItalic.ttf") format("truetype");
+}
+
+/* Bold */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 700;
+	src: url("Fira_Sans/FiraSans-Bold.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 700;
+	src: url("Fira_Sans/FiraSans-BoldItalic.ttf") format("truetype");
+}
+
+/* Extra Bold */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 800;
+	src: url("Fira_Sans/FiraSans-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 800;
+	src: url("Fira_Sans/FiraSans-ExtraBoldItalic.ttf") format("truetype");
+}
+
+/* Black */
+@font-face {
+	font-family: "Fira Sans";
+	font-style: normal;
+	font-weight: 900;
+	src: url("Fira_Sans/FiraSans-Black.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Fira Sans";
+	font-style: italic;
+	font-weight: 900;
+	src: url("Fira_Sans/FiraSans-BlackItalic.ttf") format("truetype");
+}
+
+body {
+	font-family: "Fira Sans", sans-serif;
+}
+
 :root {
 	--super-effective: #4caf50;
 	--not-effective: #f44336;
