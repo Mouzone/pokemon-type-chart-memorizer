@@ -145,6 +145,66 @@ table {
 	border-collapse: collapse;
 }
 
+th[data-type] {
+	color: white;
+}
+
+/* Individual Color Mapping */
+th[data-type="Normal"] {
+	background-color: #a8a77a;
+}
+th[data-type="Fire"] {
+	background-color: #ee3030;
+}
+th[data-type="Water"] {
+	background-color: #6390f0;
+}
+th[data-type="Electric"] {
+	background-color: #f7d02c;
+}
+th[data-type="Grass"] {
+	background-color: #7ac74c;
+}
+th[data-type="Ice"] {
+	background-color: #96d9d6;
+}
+th[data-type="Fighting"] {
+	background-color: #c22e28;
+}
+th[data-type="Poison"] {
+	background-color: #a33ea1;
+}
+th[data-type="Ground"] {
+	background-color: #e2bf65;
+}
+th[data-type="Flying"] {
+	background-color: #a98ff3;
+}
+th[data-type="Psychic"] {
+	background-color: #f95587;
+}
+th[data-type="Bug"] {
+	background-color: #a6b91a;
+}
+th[data-type="Rock"] {
+	background-color: #b6a136;
+}
+th[data-type="Ghost"] {
+	background-color: #735797;
+}
+th[data-type="Dragon"] {
+	background-color: #6f35fc;
+}
+th[data-type="Dark"] {
+	background-color: #705746;
+}
+th[data-type="Steel"] {
+	background-color: #b7b7ce;
+}
+th[data-type="Fairy"] {
+	background-color: #d685ad;
+}
+
 :root {
 	--super-effective: #4caf50;
 	--not-effective: #f44336;
