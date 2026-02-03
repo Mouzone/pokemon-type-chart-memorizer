@@ -1,0 +1,12 @@
+:root {
+	--super-effective: #4caf50;
+	--not-effective: #f44336;
+	--immune: #212121;
+}
+
+td[data-value="2"] {
+	background-color: var(--super-effective);
+}
+td[data-value="0.5"] {
+	background-color: var(--not-effective);
+}
