@@ -153,6 +153,7 @@ th.corner-cell {
 }
 
 th[data-type] {
+	font-weight: 450;
 	color: white;
 }
 
