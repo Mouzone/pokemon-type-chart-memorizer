@@ -1,5 +1,7 @@
 import multipliers from "./multipliers.json" with { type: "json" };
 
+const types = Object.keys(multipliers);
+
 const tbody = document.querySelector("tbody");
 const thead = document.querySelector("thead");
 const radioButtons = document.querySelectorAll("input");
@@ -13,13 +15,12 @@ radioButtons.forEach((radio) => {
 		} else if (event.target.value === "row") {
 			createRow();
 		} else if (event.target.value === "cell") {
+			createCell();
 		}
 	});
 });
 
 function createTable() {
-	const types = Object.keys(multipliers);
-
 	const header = document.createElement("tr");
 	const th = document.createElement("th");
 	th.className = "corner-cell";
@@ -61,8 +62,6 @@ function createTable() {
 }
 
 function createRow() {
-	const types = Object.keys(multipliers);
-
 	const header = document.createElement("tr");
 	const th = document.createElement("th");
 	th.className = "corner-cell";
@@ -76,7 +75,6 @@ function createRow() {
 	});
 	thead.appendChild(header);
 
-	// randomnly generate an attack type
 	const randomnAttack = types[Math.floor(Math.random() * types.length)];
 	const row = document.createElement("tr");
 
@@ -99,6 +97,46 @@ function createRow() {
 
 		row.appendChild(td);
 	});
+
+	tbody.appendChild(row);
+}
+
+function createCell() {
+	const randomnDefense = types[Math.floor(Math.random() * types.length)];
+	const randomnAttack = types[Math.floor(Math.random() * types.length)];
+
+	const header = document.createElement("tr");
+	const cornerCell = document.createElement("th");
+	cornerCell.className = "corner-cell";
+	cornerCell.innerText = "DEFENSE →\nATTACK ↴";
+	header.appendChild(cornerCell);
+
+	const th = document.createElement("th");
+	th.textContent = randomnDefense.slice(0, 3);
+	th.setAttribute("data-type", randomnDefense);
+	header.appendChild(th);
+
+	thead.appendChild(header);
+
+	const row = document.createElement("tr");
+
+	const rowHeader = document.createElement("th");
+	rowHeader.textContent = randomnAttack;
+	rowHeader.setAttribute("data-type", randomnAttack);
+	row.appendChild(rowHeader);
+
+	const td = document.createElement("td");
+	const multiplier = multipliers[randomnAttack][randomnDefense];
+
+	if (multiplier !== 1) {
+		td.textContent = multiplier;
+	}
+
+	td.setAttribute("data-value", multiplier);
+	td.setAttribute("data-row", randomnAttack);
+	td.setAttribute("data-col", randomnDefense);
+
+	row.appendChild(td);
 
 	tbody.appendChild(row);
 }
