@@ -1,4 +1,4 @@
-{
+export const multipliers = {
 	"Normal": {
 		"Normal": 1,
 		"Fire": 1,
@@ -359,4 +359,6 @@
 		"Steel": 0.5,
 		"Fairy": 1
 	}
-}
+};
+
+export const types = Object.keys(multipliers);

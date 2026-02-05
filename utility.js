@@ -1,45 +1,34 @@
-import multipliers from "./multipliers.json" with { type: "json" };
+// Import data
+import { multipliers, types } from "./data.js";
 
-const types = Object.keys(multipliers);
+// Keep DOM element references at the top
 const thead = document.querySelector("thead");
 const tbody = document.querySelector("tbody");
 
-export function clearTable() {
-	tbody.replaceChildren();
-	thead.replaceChildren();
-}
-export function createHeader() {
-	const header = document.createElement("tr");
+// ===== LOW-LEVEL DOM HELPERS (mostly pure) =====
+
+function createCornerCell() {
 	const cornerCell = document.createElement("th");
 	cornerCell.className = "corner-cell";
 	cornerCell.innerText = "DEFENSE →\nATTACK ↴";
-	header.appendChild(cornerCell);
-
-	return header;
+	return cornerCell;
 }
 
-export function createHeaderCell(header, type) {
+function createHeaderCell(type) {
 	const th = document.createElement("th");
 	th.textContent = type.slice(0, 3);
 	th.setAttribute("data-type", type);
-	header.appendChild(th);
+	return th;
 }
 
-export function createAllHeaderColumns(header) {
-	types.forEach((type) => {
-		createHeaderCell(header, type);
-	});
-	thead.appendChild(header);
-}
-
-export function createRowHeader(row, attack) {
+function createRowHeader(attack) {
 	const th = document.createElement("th");
 	th.textContent = attack;
 	th.setAttribute("data-type", attack);
-	row.appendChild(th);
+	return th;
 }
 
-export function createCell(row, attack, defense) {
+function createCell(attack, defense) {
 	const td = document.createElement("td");
 	const multiplier = multipliers[attack][defense];
 
@@ -51,52 +40,53 @@ export function createCell(row, attack, defense) {
 	td.setAttribute("data-row", attack);
 	td.setAttribute("data-col", defense);
 
-	row.appendChild(td);
+	return td;
 }
 
+// ===== COMPOSITE UI BUILDERS (less pure, have side effects) =====
+
+export function clearTable() {
+	tbody.replaceChildren();
+	thead.replaceChildren();
+}
+
+function buildHeader(defenseTypes = types) {
+	const headerRow = document.createElement("tr");
+	headerRow.appendChild(createCornerCell());
+	defenseTypes.forEach((type) => {
+		headerRow.appendChild(createHeaderCell(type));
+	});
+	thead.appendChild(headerRow);
+}
+
+function buildRow(attack, defenseTypes = types) {
+	const row = document.createElement("tr");
+	row.appendChild(createRowHeader(attack));
+	defenseTypes.forEach((defense) => {
+		row.appendChild(createCell(attack, defense));
+	});
+	tbody.appendChild(row);
+}
+
+// ===== EXPORTED GENERATOR FUNCTIONS (main logic) =====
+
 export function generateTable() {
-	const header = createHeader();
-	createAllHeaderColumns(header);
-
+	buildHeader(); // full header
 	types.forEach((attack) => {
-		const row = document.createElement("tr");
-
-		createRowHeader(row, attack);
-
-		types.forEach((defense) => {
-			createCell(row, attack, defense);
-		});
-
-		tbody.appendChild(row);
+		buildRow(attack); // full row
 	});
 }
 
 export function generateRow() {
-	const header = createHeader();
-	createAllHeaderColumns(header);
-
-	const randomnAttack = types[Math.floor(Math.random() * types.length)];
-	const row = document.createElement("tr");
-
-	createRowHeader(row, randomnAttack);
-	types.forEach((defense) => {
-		createCell(row, randomnAttack, defense);
-	});
-
-	tbody.appendChild(row);
+	const randomAttack = types[Math.floor(Math.random() * types.length)];
+	buildHeader(); // full header
+	buildRow(randomAttack); // single, full row
 }
 
 export function generateCell() {
-	const randomnDefense = types[Math.floor(Math.random() * types.length)];
-	const randomnAttack = types[Math.floor(Math.random() * types.length)];
+	const randomDefense = types[Math.floor(Math.random() * types.length)];
+	const randomAttack = types[Math.floor(Math.random() * types.length)];
 
-	const header = createHeader();
-	createHeaderCell(header, randomnDefense);
-	thead.appendChild(header);
-
-	const row = document.createElement("tr");
-	createRowHeader(row, randomnAttack);
-	createCell(row, randomnAttack, randomnDefense);
-
-	tbody.appendChild(row);
+	buildHeader([randomDefense]); // header with only one defense type
+	buildRow(randomAttack, [randomDefense]); // row with only one cell
 }
