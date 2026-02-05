@@ -53,3 +53,50 @@ export function createCell(row, attack, defense) {
 
 	row.appendChild(td);
 }
+
+export function generateTable() {
+	const header = createHeader();
+	createAllHeaderColumns(header);
+
+	types.forEach((attack) => {
+		const row = document.createElement("tr");
+
+		createRowHeader(row, attack);
+
+		types.forEach((defense) => {
+			createCell(row, attack, defense);
+		});
+
+		tbody.appendChild(row);
+	});
+}
+
+export function generateRow() {
+	const header = createHeader();
+	createAllHeaderColumns(header);
+
+	const randomnAttack = types[Math.floor(Math.random() * types.length)];
+	const row = document.createElement("tr");
+
+	createRowHeader(row, randomnAttack);
+	types.forEach((defense) => {
+		createCell(row, randomnAttack, defense);
+	});
+
+	tbody.appendChild(row);
+}
+
+export function generateCell() {
+	const randomnDefense = types[Math.floor(Math.random() * types.length)];
+	const randomnAttack = types[Math.floor(Math.random() * types.length)];
+
+	const header = createHeader();
+	createHeaderCell(header, randomnDefense);
+	thead.appendChild(header);
+
+	const row = document.createElement("tr");
+	createRowHeader(row, randomnAttack);
+	createCell(row, randomnAttack, randomnDefense);
+
+	tbody.appendChild(row);
+}
