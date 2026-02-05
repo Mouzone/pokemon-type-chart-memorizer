@@ -1,142 +1,71 @@
-import multipliers from "./multipliers.json" with { type: "json" };
+import {
+	createHeader,
+	createRowHeader,
+	createCell,
+	createAllHeaderColumns,
+	clearTable,
+	createHeaderCell,
+} from "./utility";
 
 const types = Object.keys(multipliers);
-
 const tbody = document.querySelector("tbody");
-const thead = document.querySelector("thead");
-const radioButtons = document.querySelectorAll("input");
 
+const radioButtons = document.querySelectorAll("input");
 radioButtons.forEach((radio) => {
 	radio.addEventListener("change", (event) => {
-		tbody.replaceChildren();
-		thead.replaceChildren();
+		clearTable();
 		if (event.target.value === "table") {
-			createTable();
+			generateTable();
 		} else if (event.target.value === "row") {
-			createRow();
+			generateRow();
 		} else if (event.target.value === "cell") {
-			createCell();
+			generateCell();
 		}
 	});
 });
 
-function createTable() {
-	const header = document.createElement("tr");
-	const th = document.createElement("th");
-	th.className = "corner-cell";
-	th.innerText = "DEFENSE →\nATTACK ↴";
-	header.appendChild(th);
-	types.forEach((type) => {
-		const th = document.createElement("th");
-		th.textContent = type.slice(0, 3);
-		th.setAttribute("data-type", type);
-		header.appendChild(th);
-	});
-	thead.appendChild(header);
+function generateTable() {
+	const header = createHeader();
+	createAllHeaderColumns(header);
 
 	types.forEach((attack) => {
 		const row = document.createElement("tr");
 
-		const th = document.createElement("th");
-		th.textContent = attack;
-		th.setAttribute("data-type", attack);
-		row.appendChild(th);
+		createRowHeader(row, attack);
 
 		types.forEach((defense) => {
-			const td = document.createElement("td");
-			const multiplier = multipliers[attack][defense];
-
-			if (multiplier !== 1) {
-				td.textContent = multiplier;
-			}
-
-			td.setAttribute("data-value", multiplier);
-			td.setAttribute("data-row", attack);
-			td.setAttribute("data-col", defense);
-
-			row.appendChild(td);
+			createCell(row, attack, defense);
 		});
 
 		tbody.appendChild(row);
 	});
 }
 
-function createRow() {
-	const header = document.createElement("tr");
-	const th = document.createElement("th");
-	th.className = "corner-cell";
-	th.innerText = "DEFENSE →\nATTACK ↴";
-	header.appendChild(th);
-	types.forEach((type) => {
-		const th = document.createElement("th");
-		th.textContent = type.slice(0, 3);
-		th.setAttribute("data-type", type);
-		header.appendChild(th);
-	});
-	thead.appendChild(header);
+function generateRow() {
+	const header = createHeader();
+	createAllHeaderColumns(header);
 
 	const randomnAttack = types[Math.floor(Math.random() * types.length)];
 	const row = document.createElement("tr");
 
-	const rowHeader = document.createElement("th");
-	rowHeader.textContent = randomnAttack;
-	rowHeader.setAttribute("data-type", randomnAttack);
-	row.appendChild(rowHeader);
-
+	createRowHeader(row, randomnAttack);
 	types.forEach((defense) => {
-		const td = document.createElement("td");
-		const multiplier = multipliers[randomnAttack][defense];
-
-		if (multiplier !== 1) {
-			td.textContent = multiplier;
-		}
-
-		td.setAttribute("data-value", multiplier);
-		td.setAttribute("data-row", randomnAttack);
-		td.setAttribute("data-col", defense);
-
-		row.appendChild(td);
+		createCell(row, randomnAttack, defense);
 	});
 
 	tbody.appendChild(row);
 }
 
-function createCell() {
+function generateCell() {
 	const randomnDefense = types[Math.floor(Math.random() * types.length)];
 	const randomnAttack = types[Math.floor(Math.random() * types.length)];
 
-	const header = document.createElement("tr");
-	const cornerCell = document.createElement("th");
-	cornerCell.className = "corner-cell";
-	cornerCell.innerText = "DEFENSE →\nATTACK ↴";
-	header.appendChild(cornerCell);
-
-	const th = document.createElement("th");
-	th.textContent = randomnDefense.slice(0, 3);
-	th.setAttribute("data-type", randomnDefense);
-	header.appendChild(th);
-
-	thead.appendChild(header);
+	const header = createHeader();
+	createHeaderCell(header, randomnDefense);
 
 	const row = document.createElement("tr");
-
-	const rowHeader = document.createElement("th");
-	rowHeader.textContent = randomnAttack;
-	rowHeader.setAttribute("data-type", randomnAttack);
-	row.appendChild(rowHeader);
-
-	const td = document.createElement("td");
-	const multiplier = multipliers[randomnAttack][randomnDefense];
-
-	if (multiplier !== 1) {
-		td.textContent = multiplier;
-	}
-
-	td.setAttribute("data-value", multiplier);
-	td.setAttribute("data-row", randomnAttack);
-	td.setAttribute("data-col", randomnDefense);
-
-	row.appendChild(td);
+	createRowHeader(row, attack);
+	createCell(row, randomnAttack, randomnDefense);
 
 	tbody.appendChild(row);
 }
