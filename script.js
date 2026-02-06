@@ -27,8 +27,8 @@ radioButtons.forEach((radio) => {
 	});
 });
 
-const button = document.querySelector("button");
-button.addEventListener("click", () => {
+const submitButton = document.querySelector("button#Submit");
+submitButton.addEventListener("click", () => {
 	const tds = document.querySelectorAll("td");
 	tds.forEach((td) => {
 		const attack = td.getAttribute("data-row");
@@ -38,4 +38,19 @@ button.addEventListener("click", () => {
 			td.removeEventListener("click", onClick);
 		}
 	});
+});
+
+const generateButton = document.querySelector("button#Generate");
+generateButton.addEventListener("click", () => {
+	const selectedValue = document.querySelector(
+		'input[name="to-display"]:checked',
+	)?.value;
+	clearTable();
+	if (selectedValue === "table") {
+		generateTable();
+	} else if (selectedValue === "row") {
+		generateRow();
+	} else if (selectedValue === "cell") {
+		generateCell();
+	}
 });
