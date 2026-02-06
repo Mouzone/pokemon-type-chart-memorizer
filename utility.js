@@ -31,7 +31,7 @@ function createRowHeader(attack) {
 function createCell(attack, defense) {
 	const td = document.createElement("td");
 
-	td.setAttribute("data-value", 1);
+	td.setAttribute("data-value", "1");
 	td.setAttribute("data-row", attack);
 	td.setAttribute("data-col", defense);
 
@@ -41,9 +41,7 @@ function createCell(attack, defense) {
 		const nextValue = valueOrder[currentValue];
 
 		td.setAttribute("data-value", nextValue);
-		if (td.textContent !== "1") {
-			td.textContent = nextValue;
-		}
+		td.textContent = nextValue !== "1" ? nextValue : "";
 	});
 	return td;
 }

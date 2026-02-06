@@ -361,5 +361,5 @@ export const multipliers = {
 	},
 };
 
-export const valueOrder = { 0: 0.5, 0.5: 1, 1: 2, 2: 0 };
+export const valueOrder = { 0: "0.5", 0.5: "1", 1: "2", 2: "0" };
 export const types = Object.keys(multipliers);
