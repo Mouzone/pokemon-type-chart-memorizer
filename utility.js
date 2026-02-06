@@ -35,15 +35,18 @@ function createCell(attack, defense) {
 	td.setAttribute("data-row", attack);
 	td.setAttribute("data-col", defense);
 
-	td.addEventListener("click", () => {
-		const currentValue = td.getAttribute("data-value");
-
-		const nextValue = valueOrder[currentValue];
-
-		td.setAttribute("data-value", nextValue);
-		td.textContent = nextValue !== "1" ? nextValue : "";
-	});
+	td.addEventListener("click", onClick);
 	return td;
+}
+
+export function onClick(event) {
+	const cell = event.currentTarget;
+	const currentValue = cell.getAttribute("data-value");
+	const nextValue = valueOrder[currentValue];
+
+	cell.setAttribute("data-value", nextValue);
+
+	cell.textContent = nextValue != 1 ? nextValue : "";
 }
 
 // ===== COMPOSITE UI BUILDERS (less pure, have side effects) =====
