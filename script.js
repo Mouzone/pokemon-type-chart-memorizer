@@ -33,9 +33,7 @@ button.addEventListener("click", () => {
 	tds.forEach((td) => {
 		const attack = td.getAttribute("data-row");
 		const defense = td.getAttribute("data-col");
-		if (
-			`${multipliers[attack][defense]}` === td.getAttribute("data-value")
-		) {
+		if (multipliers[attack][defense] === td.getAttribute("data-value")) {
 			td.textContent = "✅";
 			td.removeEventListener("click", onClick);
 		}
