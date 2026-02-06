@@ -1,5 +1,5 @@
 // Import data
-import { multipliers, types } from "./data.js";
+import { valueOrder, types } from "./data.js";
 
 // Keep DOM element references at the top
 const thead = document.querySelector("thead");
@@ -30,16 +30,21 @@ function createRowHeader(attack) {
 
 function createCell(attack, defense) {
 	const td = document.createElement("td");
-	const multiplier = multipliers[attack][defense];
 
-	if (multiplier !== 1) {
-		td.textContent = multiplier;
-	}
-
-	td.setAttribute("data-value", multiplier);
+	td.setAttribute("data-value", 1);
 	td.setAttribute("data-row", attack);
 	td.setAttribute("data-col", defense);
 
+	td.addEventListener("click", () => {
+		const currentValue = td.getAttribute("data-value");
+
+		const nextValue = valueOrder[currentValue];
+
+		td.setAttribute("data-value", nextValue);
+		if (td.textContent !== "1") {
+			td.textContent = nextValue;
+		}
+	});
 	return td;
 }
 
