@@ -328,3 +328,218 @@ div#buttons {
 	text-decoration: underline;
 	opacity: 1;
 }
+
+/* Mobile Responsive Design */
+@media (max-width: 900px) {
+	/* Fixed Viewport Split Layout */
+	body {
+		flex-direction: column;
+		height: 100dvh; /* Fixed height */
+		min-height: 100dvh;
+		overflow: hidden; /* Prevent body scroll */
+		justify-content: flex-start;
+		padding: 0;
+	}
+
+	/* TABLE: Top 85% - Maximize Content Area */
+	div#table-container {
+		order: 1; /* Visually First */
+		width: 100%;
+		height: 85%; /* Increased height */
+		margin: 0;
+		padding: 0;
+		min-height: 0; /* Allow shrinking */
+		display: flex; /* Flexbox for centering */
+		flex-direction: column; /* Allow scrolling content */
+		overflow: auto; /* Scrollable area */
+		background-color: transparent;
+	}
+	
+	/* Center the table when it's smaller than the container */
+	table {
+		margin: auto; /* Safe centering for flex/block containers */
+	}
+
+	/* CONTROLS: Bottom 15% - Bare HTML & Centered */
+	div#buttons {
+		order: 2; /* Visually Second */
+		width: 100%;
+		height: 15%; /* Compact Control Area */
+		background-color: white; 
+		border: none; /* Removed border */
+		padding: 5px;
+		box-sizing: border-box;
+		position: relative; /* Not sticky, just fixed in grid/flex */
+		z-index: 10;
+        
+        /* Layout: Stacked Rows via Column Flex */
+        display: flex;
+        flex-direction: column; /* Use column to ensure strict centering */
+        justify-content: center; /* Center vertically in the 15% space */
+        align-items: center; /* Center horizontally */
+        gap: 5px;
+	}
+
+	/* Row 1: Radio Buttons (Full Width) */
+	div#radio-buttons {
+		order: 1;
+		width: 100%;
+		display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+		border: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	/* Reset Inputs completely to default */
+	div#radio-buttons input[type="radio"] {
+		position: static;
+		width: auto;
+		height: auto;
+		margin: 0 4px 0 0;
+        appearance: auto; 
+	}
+
+	div#radio-buttons label {
+		padding: 0;
+		background: none;
+		border: none;
+		font-weight: normal;
+        cursor: default;
+        margin-right: 5px;
+        font-size: 1rem;
+	}
+    
+    div#radio-buttons br {
+        display: none; 
+    }
+    
+    /* Row 2 Wrapper (Virtual via Flex wrap logic in previous attempt, 
+       but here we are using `flex-direction: column` on parent so items stack naturally?
+       Wait, #buttons contains [div#radio-buttons, select, button, button].
+       If I use `flex-direction: column`, the div is Item 1.
+       select, button, button are Items 2, 3, 4. 
+       They will stack vertically if not wrapped.
+       To make them a "Row 2", I need a wrapper OR layout trick.
+       Let's use `display: flex; flex-flow: row wrap; justify-content: center; align-content: center;`.
+       Force break after radios.
+    */
+    
+    /* Revert to Row Wrap for structure: */
+    div#buttons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center; /* Center rows vertically */
+        align-items: center;
+    }
+    
+    div#radio-buttons {
+        flex: 0 1 auto; /* Shrink to fit content */
+        margin-bottom: 5px;
+        /* Restore "Box" Look */
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 0.5em; /* Match default padding */
+        width: auto;
+    }
+
+	/* Row 2 Items: Action Buttons & Select */
+	#type-selector {
+		order: 2;
+		width: 120px; /* Fixed width to prevent layout shift */
+        text-align: center;
+        text-align-last: center; /* For select text */
+		margin: 0 5px;
+        padding: 2px 4px; /* Reduced vertical padding */
+        font-size: 1rem;
+        height: auto;
+	}
+
+    #Generate, #Submit {
+        order: 2;
+        margin: 0 5px;
+    }
+
+	/* Sticky Headers inside the scrollable table area */
+	thead th {
+		position: sticky;
+		top: 0;
+		z-index: 5;
+        box-sizing: border-box;
+	}
+	
+	thead th.corner-cell {
+		z-index: 6;
+		background-color: white;
+		left: 0;
+		position: sticky;
+        /* Strict Fixed Width against Shift */
+        width: 75px; 
+        min-width: 75px;
+        max-width: 75px;
+        box-sizing: border-box;
+	}
+
+	tbody th {
+		position: sticky;
+		left: 0;
+		z-index: 4;
+		background-color: white; 
+        /* Strict Fixed Width against Shift */
+        width: 75px; 
+        min-width: 75px;
+        max-width: 75px;
+        /* Handle Overflow */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+	}
+
+	/* Adjust font sizes */
+	th, td {
+		font-size: 0.75rem;
+		width: 30px;
+		height: 30px;
+		padding: 2px;
+        box-sizing: border-box;
+	}
+    
+    /* Ensure other headers don't shrink */
+    thead th:not(.corner-cell) {
+        min-width: 30px;
+    }
+
+	th.corner-cell {
+		width: 75px;
+		height: 30px;
+		font-size: 0.65rem;
+	}
+	
+	tbody th {
+		width: 75px;
+	}
+
+	/* Footer: Hide or Absolute bottom right tiny? */
+	/* User didn't specify, but fixed 25% height controls might cover it if simple flow. 
+	   Let's absolute position it bottom-right of body or hide to save space?
+	   I'll put it at the very bottom of the Controls area effectively, or overlay. */
+	#reference-link {
+		position: absolute;
+		bottom: 5px;
+		right: 10px;
+		left: auto;
+		transform: none;
+		font-size: 0.7rem;
+		background: none;
+		border: none;
+		width: auto;
+		padding: 0;
+		opacity: 0.5;
+		z-index: 20;
+	}
+}

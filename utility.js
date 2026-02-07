@@ -134,13 +134,18 @@ export function createTypeSelector(container, onSelect) {
 	// using onchange property is cleaner for this single-purpose element.
 	select.onchange = (e) => onSelect(e.target.value);
 
-	select.style.visibility = "visible";
+	select.disabled = false;
+	select.style.visibility = "visible"; // Ensure it's visible if it was hidden
 	return select;
 }
 
 export function removeTypeSelector(container) {
 	const select = document.getElementById("type-selector");
 	if (select) {
-		select.style.visibility = "hidden";
+		select.disabled = true;
+        // Ensure it stays visible but disabled
+        select.style.visibility = "visible";
+        // Reset to "Normal" so it doesn't show previous selection
+        select.value = "Normal";
 	}
 }

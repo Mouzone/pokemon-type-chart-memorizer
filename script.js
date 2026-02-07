@@ -17,6 +17,11 @@ tds.forEach((td) => {
 
 const buttonsGroup = document.querySelector("div#buttons");
 
+// Initialize Type Selector (populated but disabled, value = Normal)
+const initialSelect = createTypeSelector(buttonsGroup, () => {});
+initialSelect.value = "Normal";
+initialSelect.disabled = true;
+
 const radioButtons = document.querySelectorAll("input");
 radioButtons.forEach((radio) => {
 	radio.addEventListener("change", (event) => {
