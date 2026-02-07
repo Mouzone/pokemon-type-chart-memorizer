@@ -176,7 +176,7 @@ th[data-type] {
 	color: white;
 	width: 35px;
 	height: 35px;
-	padding: 4px;
+	padding: 0.5em;
 	box-sizing: border-box;
 	vertical-align: middle;
 }
