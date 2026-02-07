@@ -292,4 +292,23 @@ div#buttons {
 	align-items: center;
 	justify-content: center;
 	gap: 0.5em
-};
+}
+
+#reference-link {
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 0.9rem;
+}
+
+#reference-link a {
+	color: #333;
+	text-decoration: none;
+	opacity: 0.7;
+}
+
+#reference-link a:hover {
+	text-decoration: underline;
+	opacity: 1;
+}
