@@ -22,7 +22,9 @@
 		<link rel="icon" type="image/x-icon" href="favicon.png">
 	</head>
 	<body>
-		<div id="radio-buttons">
+		
+<div id="buttons">
+			<div id="radio-buttons">
 			<input
 				type="radio"
 				id="table"
@@ -46,7 +48,10 @@
 			/>
 			<label for="cell">Cell</label>
 		</div>
-
+			<select id="type-selector" style="visibility: hidden;"></select>
+			<button id="Generate">Generate New</button>
+			<button id="Submit">Submit</button>
+		</div>
 		<div id="table-container">
 			<table>
 			<thead>
@@ -1750,11 +1755,7 @@
 			</tbody>
 			</table>
 		</div>
-		<div id="buttons">
-			<select id="type-selector" style="visibility: hidden;"></select>
-			<button id="Generate">Generate New</button>
-			<button id="Submit">Submit</button>
-		</div>
+		
 		<footer id="reference-link">
 			<a href="https://pokemondb.net/type" target="_blank">Reference: Pokémon Database</a>
 		</footer>
