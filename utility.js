@@ -1,5 +1,5 @@
 // Import data
-import { valueOrder, types } from "./data.js";
+import { valueOrder, types, multipliers } from "./data.js";
 
 // Keep DOM element references at the top
 const thead = document.querySelector("thead");
@@ -54,7 +54,6 @@ export function onClick(event) {
 export function clearTable() {
 	tbody.replaceChildren();
 	thead.replaceChildren();
-
 }
 
 function buildHeader(defenseTypes = types) {
@@ -101,4 +100,49 @@ export function generateCell() {
 
 	buildHeader([randomDefense]); // header with only one defense type
 	buildRow(randomAttack, [randomDefense]); // row with only one cell
+}
+
+export function validateAnswers() {
+	const tds = document.querySelectorAll("td");
+	tds.forEach((td) => {
+		const attack = td.getAttribute("data-row");
+		const defense = td.getAttribute("data-col");
+		if (multipliers[attack][defense] === td.getAttribute("data-value")) {
+			td.textContent = "✅";
+			td.removeEventListener("click", onClick);
+		}
+	});
+}
+
+export function createTypeSelector(container, onSelect) {
+	// Remove existing selector if any
+	const existingSelect = container.querySelector("select");
+	if (existingSelect) {
+		existingSelect.remove();
+	}
+
+	const select = document.createElement("select");
+	
+	const randomOption = document.createElement("option");
+	randomOption.value = "random";
+	randomOption.textContent = "Random";
+	select.appendChild(randomOption);
+
+	types.forEach((type) => {
+		const option = document.createElement("option");
+		option.value = type;
+		option.textContent = type;
+		select.appendChild(option);
+	});
+
+	select.addEventListener("change", (e) => onSelect(e.target.value));
+	container.appendChild(select);
+	return select;
+}
+
+export function removeTypeSelector(container) {
+	const select = container.querySelector("select");
+	if (select) {
+		select.remove();
+	}
 }
