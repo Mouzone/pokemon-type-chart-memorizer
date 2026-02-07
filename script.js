@@ -6,7 +6,7 @@ import {
 	onClick,
 } from "./utility.js";
 
-import { multipliers } from "./data.js";
+import { multipliers, types } from "./data.js";
 
 const tds = document.querySelectorAll("td");
 tds.forEach((td) => {
@@ -17,10 +17,28 @@ const radioButtons = document.querySelectorAll("input");
 radioButtons.forEach((radio) => {
 	radio.addEventListener("change", (event) => {
 		clearTable();
+		const select = document.querySelector("select");
+		if (select) {
+			select.remove();
+		}
 		if (event.target.value === "table") {
 			generateTable();
 		} else if (event.target.value === "row") {
-			generateRow();
+			generateRow("random");
+			
+			const select = document.createElement("select");
+			const randomOption = document.createElement("option");
+			randomOption.value = "random";
+			randomOption.textContent = "Random";
+			select.appendChild(randomOption);
+			for (const type of types) {
+				const option = document.createElement("option");
+				option.value = type;
+				option.textContent = type;
+				select.appendChild(option);
+			}
+			const buttonsGroup = document.querySelector("div#buttons");
+			buttonsGroup.appendChild(select)
 		} else if (event.target.value === "cell") {
 			generateCell();
 		}
@@ -47,9 +65,12 @@ generateButton.addEventListener("click", () => {
 	)?.value;
 	clearTable();
 	if (selectedValue === "table") {
+		
 		generateTable();
 	} else if (selectedValue === "row") {
-		generateRow();
+		const select = document.querySelector("select");
+		const attack = select.value;
+		generateRow(attack);
 	} else if (selectedValue === "cell") {
 		generateCell();
 	}

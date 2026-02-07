@@ -54,6 +54,7 @@ export function onClick(event) {
 export function clearTable() {
 	tbody.replaceChildren();
 	thead.replaceChildren();
+
 }
 
 function buildHeader(defenseTypes = types) {
@@ -83,10 +84,15 @@ export function generateTable() {
 	});
 }
 
-export function generateRow() {
-	const randomAttack = types[Math.floor(Math.random() * types.length)];
+export function generateRow(attack) {
+	let attackType;
+	if (attack === "random") {
+		attackType = types[Math.floor(Math.random() * types.length)];
+	} else {
+		attackType = attack;
+	}
 	buildHeader(); // full header
-	buildRow(randomAttack); // single, full row
+	buildRow(attackType); // single, full row
 }
 
 export function generateCell() {
