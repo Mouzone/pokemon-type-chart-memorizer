@@ -116,7 +116,7 @@ export function validateAnswers() {
 	});
 }
 
-export function createTypeSelector(container, onSelect) {
+export function createTypeSelector(onSelect) {
 	const select = document.getElementById("type-selector");
 	if (!select) return;
 
@@ -139,7 +139,7 @@ export function createTypeSelector(container, onSelect) {
 	return select;
 }
 
-export function removeTypeSelector(container) {
+export function removeTypeSelector() {
 	const select = document.getElementById("type-selector");
 	if (select) {
 		select.disabled = true;

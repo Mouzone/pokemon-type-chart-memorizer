@@ -9,16 +9,13 @@ import {
 	removeTypeSelector,
 } from "./utility.js";
 
-// Add click listeners to any initial table cells (though usually table is empty on load)
-const tds = document.querySelectorAll("td");
-tds.forEach((td) => {
-	td.addEventListener("click", onClick);
-});
+// Initialize Table
+generateTable();
 
 const buttonsGroup = document.querySelector("div#buttons");
 
 // Initialize Type Selector (populated but disabled, value = Normal)
-const initialSelect = createTypeSelector(buttonsGroup, () => {});
+const initialSelect = createTypeSelector(() => {});
 initialSelect.value = "Normal";
 initialSelect.disabled = true;
 
@@ -31,13 +28,13 @@ radioButtons.forEach((radio) => {
 		// Handle Type Selector
 		if (mode === "row") {
 			const attackType = generateRow("random");
-			const select = createTypeSelector(buttonsGroup, (selectedType) => {
+			const select = createTypeSelector((selectedType) => {
 				clearTable();
 				generateRow(selectedType);
 			});
 			select.value = attackType;
 		} else {
-			removeTypeSelector(buttonsGroup);
+			removeTypeSelector();
 			if (mode === "table") {
 				generateTable();
 			} else if (mode === "cell") {
