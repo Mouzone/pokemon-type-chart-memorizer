@@ -149,6 +149,7 @@ div#radio-buttons {
 
 div#table-container {
 	width: 60vw;
+	min-height: 700px; /* Ensure enough height for full table */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -156,6 +157,7 @@ div#table-container {
 
 table {
 	border-collapse: collapse;
+	table-layout: fixed; /* Fix cell sizes */
 }
 
 th.corner-cell {
@@ -163,11 +165,15 @@ th.corner-cell {
 	text-align: center;
 	vertical-align: top;
 	font-size: 10px;
+	width: 40px;
+	height: 40px;
 }
 
 th[data-type] {
 	font-weight: 450;
 	color: white;
+	width: 35px;
+	height: 35px;
 }
 
 /* Type Color Variables */
@@ -268,12 +274,16 @@ td[data-value="0"] {
 th,
 td {
 	text-align: center;
-	padding: 0.5em;
+	padding: 0;
 	margin: 0;
+	width: 35px;
+	height: 35px;
+	box-sizing: border-box;
 }
 
 td {
 	border: 1px solid lightgray;
+	overflow: hidden; /* Hide overflow */
 }
 
 div#buttons {

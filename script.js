@@ -30,8 +30,6 @@ radioButtons.forEach((radio) => {
 				clearTable();
 				generateRow(selectedType);
 			});
-			// Insert select at the top of buttonsGroup
-			buttonsGroup.insertBefore(select, buttonsGroup.firstChild);
 			select.value = attackType;
 		} else {
 			removeTypeSelector(buttonsGroup);

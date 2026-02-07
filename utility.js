@@ -117,29 +117,30 @@ export function validateAnswers() {
 }
 
 export function createTypeSelector(container, onSelect) {
-	// Remove existing selector if any
-	const existingSelect = container.querySelector("select");
-	if (existingSelect) {
-		existingSelect.remove();
+	const select = document.getElementById("type-selector");
+	if (!select) return;
+
+	// Populate if empty
+	if (select.children.length === 0) {
+		types.forEach((type) => {
+			const option = document.createElement("option");
+			option.value = type;
+			option.textContent = type;
+			select.appendChild(option);
+		});
 	}
-
-	const select = document.createElement("select");
 	
-	types.forEach((type) => {
-		const option = document.createElement("option");
-		option.value = type;
-		option.textContent = type;
-		select.appendChild(option);
-	});
+	// Ensure we handle change properly. Since we can't easily remove anonymous listeners,
+	// using onchange property is cleaner for this single-purpose element.
+	select.onchange = (e) => onSelect(e.target.value);
 
-	select.addEventListener("change", (e) => onSelect(e.target.value));
-	container.appendChild(select);
+	select.style.visibility = "visible";
 	return select;
 }
 
 export function removeTypeSelector(container) {
-	const select = container.querySelector("select");
+	const select = document.getElementById("type-selector");
 	if (select) {
-		select.remove();
+		select.style.visibility = "hidden";
 	}
 }
