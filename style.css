@@ -531,13 +531,14 @@ div#buttons {
 	#reference-link {
 		position: absolute;
 		bottom: 5px;
-		right: 10px;
-		left: auto;
-		transform: none;
-		font-size: 0.7rem;
+		left: 50%;
+		transform: translateX(-50%);
+		text-align: center;
+		right: auto;
+		font-size: 0.6rem;
 		background: none;
 		border: none;
-		width: auto;
+		width: 100%;
 		padding: 0;
 		opacity: 0.5;
 		z-index: 20;
