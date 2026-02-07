@@ -25,11 +25,14 @@ radioButtons.forEach((radio) => {
 		
 		// Handle Type Selector
 		if (mode === "row") {
-			generateRow("random");
-			createTypeSelector(buttonsGroup, (selectedType) => {
+			const attackType = generateRow("random");
+			const select = createTypeSelector(buttonsGroup, (selectedType) => {
 				clearTable();
 				generateRow(selectedType);
 			});
+			// Insert select at the top of buttonsGroup
+			buttonsGroup.insertBefore(select, buttonsGroup.firstChild);
+			select.value = attackType;
 		} else {
 			removeTypeSelector(buttonsGroup);
 			if (mode === "table") {
@@ -55,9 +58,11 @@ generateButton.addEventListener("click", () => {
 	if (selectedValue === "table") {
 		generateTable();
 	} else if (selectedValue === "row") {
+		const attackType = generateRow("random");
 		const select = buttonsGroup.querySelector("select");
-		const attack = select ? select.value : "random";
-		generateRow(attack);
+		if (select) {
+			select.value = attackType;
+		}
 	} else if (selectedValue === "cell") {
 		generateCell();
 	}

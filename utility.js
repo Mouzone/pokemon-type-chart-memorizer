@@ -92,6 +92,8 @@ export function generateRow(attack) {
 	}
 	buildHeader(); // full header
 	buildRow(attackType); // single, full row
+	
+	return attackType;
 }
 
 export function generateCell() {
@@ -123,11 +125,6 @@ export function createTypeSelector(container, onSelect) {
 
 	const select = document.createElement("select");
 	
-	const randomOption = document.createElement("option");
-	randomOption.value = "random";
-	randomOption.textContent = "Random";
-	select.appendChild(randomOption);
-
 	types.forEach((type) => {
 		const option = document.createElement("option");
 		option.value = type;

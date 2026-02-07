@@ -141,6 +141,19 @@ body {
 	justify-content: center;
 }
 
+div#radio-buttons {
+	border: 1px solid black;
+	padding: 0.5em;
+	border-radius: 10px;
+}
+
+div#table-container {
+	width: 60vw;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 table {
 	border-collapse: collapse;
 }
@@ -262,3 +275,11 @@ td {
 td {
 	border: 1px solid lightgray;
 }
+
+div#buttons {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em
+};

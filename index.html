@@ -21,7 +21,7 @@
 		></script>
 	</head>
 	<body>
-		<div>
+		<div id="radio-buttons">
 			<input
 				type="radio"
 				id="table"
@@ -46,7 +46,8 @@
 			<label for="cell">Cell</label>
 		</div>
 
-		<table>
+		<div id="table-container">
+			<table>
 			<thead>
 				<tr>
 					<th class="corner-cell">DEFENSE →<br />ATTACK ↴</th>
@@ -1746,10 +1747,11 @@
 					></td>
 				</tr>
 			</tbody>
-		</table>
+			</table>
+		</div>
 		<div id="buttons">
-			<button id="Submit">Submit</button>
 			<button id="Generate">Generate New</button>
+			<button id="Submit">Submit</button>
 		</div>
 	</body>
 </html>
