@@ -3,6 +3,7 @@ import {
 	generateTable,
 	generateRow,
 	generateCell,
+	generateColumn,
 	onClick,
 	validateAnswers,
 	createTypeSelector,
@@ -33,6 +34,13 @@ radioButtons.forEach((radio) => {
 				generateRow(selectedType);
 			});
 			select.value = attackType;
+		} else if (mode === "column") {
+			const defenseType = generateColumn("random");
+			const select = createTypeSelector((selectedType) => {
+				clearTable();
+				generateColumn(selectedType);
+			});
+			select.value = defenseType;
 		} else {
 			removeTypeSelector();
 			if (mode === "table") {
@@ -62,6 +70,12 @@ generateButton.addEventListener("click", () => {
 		const select = buttonsGroup.querySelector("select");
 		if (select) {
 			select.value = attackType;
+		}
+	} else if (selectedValue === "column") {
+		const defenseType = generateColumn("random");
+		const select = buttonsGroup.querySelector("select");
+		if (select) {
+			select.value = defenseType;
 		}
 	} else if (selectedValue === "cell") {
 		generateCell();

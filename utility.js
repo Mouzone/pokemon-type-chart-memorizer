@@ -46,7 +46,13 @@ export function onClick(event) {
 
 	cell.setAttribute("data-value", nextValue);
 
-	cell.textContent = nextValue != 1 ? nextValue : "";
+	if (nextValue == 1) {
+		cell.textContent = "";
+	} else if (nextValue == 0.5) {
+		cell.textContent = "½";
+	} else {
+		cell.textContent = nextValue;
+	}
 }
 
 // ===== COMPOSITE UI BUILDERS (less pure, have side effects) =====
@@ -94,6 +100,21 @@ export function generateRow(attack) {
 	buildRow(attackType); // single, full row
 	
 	return attackType;
+}
+
+export function generateColumn(defense) {
+	let defenseType;
+	if (defense === "random") {
+		defenseType = types[Math.floor(Math.random() * types.length)];
+	} else {
+		defenseType = defense;
+	}
+	buildHeader([defenseType]); // header with only one defense type
+	types.forEach((attack) => {
+		buildRow(attack, [defenseType]); // row with only one cell
+	});
+	
+	return defenseType;
 }
 
 export function generateCell() {
