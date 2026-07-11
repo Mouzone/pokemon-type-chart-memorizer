@@ -335,13 +335,17 @@ div#buttons {
 	}
 
 	div#buttons {
-		flex-direction: column;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
 		gap: 10px;
 		margin-bottom: 1rem;
 		width: 95%;
 	}
 
 	div#radio-buttons {
+		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
@@ -379,5 +383,10 @@ div#buttons {
 		left: 0;
 		z-index: 4;
 		background-color: white; 
+	}
+
+	#reference-link {
+		width: 100%;
+		text-align: center;
 	}
 }
