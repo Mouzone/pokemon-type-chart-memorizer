@@ -340,7 +340,6 @@ div#buttons {
 		justify-content: center;
 		gap: 10px;
 		margin-bottom: 1rem;
-		margin-top: auto; /* Spring to push content down */
 		width: 95%;
 	}
 
@@ -359,7 +358,8 @@ div#buttons {
 		max-height: 80vh;
 		overflow: auto;
 		display: block; /* Remove flex to allow proper scrolling */
-		margin-bottom: auto; /* Spring to push content up */
+		margin-top: auto;
+		margin-bottom: auto;
 	}
 
 	table {
