@@ -330,7 +330,7 @@ div#buttons {
 		flex-direction: column;
 		height: auto;
 		min-height: 100dvh;
-		justify-content: flex-start;
+		justify-content: center;
 		padding: 1rem 0;
 	}
 
