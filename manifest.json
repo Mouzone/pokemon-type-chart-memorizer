@@ -1,6 +1,6 @@
 {
-  "name": "TypeChartMemorizer",
-  "short_name": "TypeChartMemorizer",
+  "name": "Type Chart Memorizer",
+  "short_name": "Type Chart Memorizer",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
