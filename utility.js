@@ -1,9 +1,60 @@
 // Import data
-import { valueOrder, types, multipliers } from "./data.js";
+import { valueOrder, dualValueOrder, types, multipliers } from "./data.js";
 
-// Keep DOM element references at the top
 const thead = document.querySelector("thead");
 const tbody = document.querySelector("tbody");
+
+// ===== PRE-COMPUTED CACHES =====
+const allColumnDualPairs = [];
+for (let i = 0; i < types.length; i++) {
+	for (let j = i + 1; j < types.length; j++) {
+		allColumnDualPairs.push(types[i] + "_" + types[j]);
+	}
+}
+
+const allCells = [];
+types.forEach(a => types.forEach(d => allCells.push(a + "_" + d)));
+
+const allDualCells = [];
+types.forEach(a => {
+	for (let i = 0; i < types.length; i++) {
+		for (let j = i + 1; j < types.length; j++) {
+			allDualCells.push(a + "_" + types[i] + "_" + types[j]);
+		}
+	}
+});
+
+// ===== STATE MANAGEMENT =====
+export const weights = {
+	row: {},
+	column: {},
+	columnDual: {},
+	cell: {},
+	cellDual: {}
+};
+
+export const currentTest = {
+	mode: null,
+	key: null,
+	scored: true
+};
+
+function getWeightedRandom(mode, possibleKeys) {
+	const modeWeights = weights[mode];
+	let totalWeight = 0;
+	const keyWeights = possibleKeys.map(key => {
+		const w = modeWeights[key] || 10;
+		totalWeight += w;
+		return { key, weight: w };
+	});
+	
+	let random = Math.random() * totalWeight;
+	for (const item of keyWeights) {
+		random -= item.weight;
+		if (random <= 0) return item.key;
+	}
+	return possibleKeys[possibleKeys.length - 1];
+}
 
 // ===== LOW-LEVEL DOM HELPERS (mostly pure) =====
 
@@ -28,32 +79,46 @@ function createRowHeader(attack) {
 	return th;
 }
 
-function createCell(attack, defense) {
+function createCell(attack, defense, isDual = false, defense2 = null) {
 	const td = document.createElement("td");
 
-	td.setAttribute("data-value", "1");
+	td.setAttribute("data-value", "blank");
 	td.setAttribute("data-row", attack);
 	td.setAttribute("data-col", defense);
+	if (isDual) {
+		td.setAttribute("data-dual", "true");
+		td.setAttribute("data-col-2", defense2);
+		td.setAttribute("colspan", "2");
+	}
 
-	td.addEventListener("click", onClick);
+	// Removed individual click listener for event delegation
 	return td;
 }
 
-export function onClick(event) {
-	const cell = event.currentTarget;
+// ===== EVENT DELEGATION =====
+tbody.addEventListener("click", (event) => {
+	const cell = event.target.closest("td");
+	if (!cell) return;
+	
+	if (cell.getAttribute("data-locked") === "true") return;
+	
 	const currentValue = cell.getAttribute("data-value");
-	const nextValue = valueOrder[currentValue];
+	const isDual = cell.getAttribute("data-dual") === "true";
+	const order = isDual ? dualValueOrder : valueOrder;
+	const nextValue = order[currentValue] || "blank";
 
 	cell.setAttribute("data-value", nextValue);
 
-	if (nextValue == 1) {
+	if (nextValue === "blank" || nextValue === "1") {
 		cell.textContent = "";
-	} else if (nextValue == 0.5) {
+	} else if (nextValue === "0.5") {
 		cell.textContent = "½";
+	} else if (nextValue === "0.25") {
+		cell.textContent = "¼";
 	} else {
 		cell.textContent = nextValue;
 	}
-}
+});
 
 // ===== COMPOSITE UI BUILDERS (less pure, have side effects) =====
 
@@ -68,36 +133,48 @@ function buildHeader(defenseTypes = types) {
 	defenseTypes.forEach((type) => {
 		headerRow.appendChild(createHeaderCell(type));
 	});
-	thead.appendChild(headerRow);
+	return headerRow;
 }
 
-function buildRow(attack, defenseTypes = types) {
+function buildRow(attack, defenseTypes = types, isDual = false) {
 	const row = document.createElement("tr");
 	row.appendChild(createRowHeader(attack));
-	defenseTypes.forEach((defense) => {
-		row.appendChild(createCell(attack, defense));
-	});
-	tbody.appendChild(row);
+	if (isDual) {
+		row.appendChild(createCell(attack, defenseTypes[0], true, defenseTypes[1]));
+	} else {
+		defenseTypes.forEach((defense) => {
+			row.appendChild(createCell(attack, defense));
+		});
+	}
+	return row;
 }
 
 // ===== EXPORTED GENERATOR FUNCTIONS (main logic) =====
 
 export function generateTable() {
-	buildHeader(); // full header
+	currentTest.mode = null;
+	currentTest.scored = true;
+	thead.appendChild(buildHeader()); // full header
+	const fragment = document.createDocumentFragment();
 	types.forEach((attack) => {
-		buildRow(attack); // full row
+		fragment.appendChild(buildRow(attack)); // full row
 	});
+	tbody.appendChild(fragment);
 }
 
 export function generateRow(attack) {
 	let attackType;
 	if (attack === "random") {
-		attackType = types[Math.floor(Math.random() * types.length)];
+		attackType = getWeightedRandom("row", types);
 	} else {
 		attackType = attack;
 	}
-	buildHeader(); // full header
-	buildRow(attackType); // single, full row
+	currentTest.mode = "row";
+	currentTest.key = attackType;
+	currentTest.scored = false;
+
+	thead.appendChild(buildHeader()); // full header
+	tbody.appendChild(buildRow(attackType)); // single, full row
 	
 	return attackType;
 }
@@ -105,40 +182,126 @@ export function generateRow(attack) {
 export function generateColumn(defense) {
 	let defenseType;
 	if (defense === "random") {
-		defenseType = types[Math.floor(Math.random() * types.length)];
+		defenseType = getWeightedRandom("column", types);
 	} else {
 		defenseType = defense;
 	}
-	buildHeader([defenseType]); // header with only one defense type
+	currentTest.mode = "column";
+	currentTest.key = defenseType;
+	currentTest.scored = false;
+
+	thead.appendChild(buildHeader([defenseType])); // header with only one defense type
+	const fragment = document.createDocumentFragment();
 	types.forEach((attack) => {
-		buildRow(attack, [defenseType]); // row with only one cell
+		fragment.appendChild(buildRow(attack, [defenseType])); // row with only one cell
 	});
+	tbody.appendChild(fragment);
 	
 	return defenseType;
 }
 
-export function generateCell() {
-	const randomDefense = types[Math.floor(Math.random() * types.length)];
-	const randomAttack = types[Math.floor(Math.random() * types.length)];
+export function generateDualColumn(defense1, defense2) {
+	let def1 = defense1;
+	let def2 = defense2;
+	
+	if (defense1 === "random" || defense2 === "random") {
+		const randomPair = getWeightedRandom("columnDual", allColumnDualPairs).split("_");
+		def1 = randomPair[0];
+		def2 = randomPair[1];
+	} else {
+		const sorted = [defense1, defense2].sort();
+		def1 = sorted[0];
+		def2 = sorted[1];
+	}
 
-	buildHeader([randomDefense]); // header with only one defense type
-	buildRow(randomAttack, [randomDefense]); // row with only one cell
+	currentTest.mode = "columnDual";
+	currentTest.key = def1 + "_" + def2;
+	currentTest.scored = false;
+
+	thead.appendChild(buildHeader([def1, def2])); 
+	const fragment = document.createDocumentFragment();
+	types.forEach((attack) => {
+		fragment.appendChild(buildRow(attack, [def1, def2], true));
+	});
+	tbody.appendChild(fragment);
+	
+	return [def1, def2];
+}
+
+export function generateCell() {
+	const randomCell = getWeightedRandom("cell", allCells).split("_");
+	const randomAttack = randomCell[0];
+	const randomDefense = randomCell[1];
+
+	currentTest.mode = "cell";
+	currentTest.key = randomAttack + "_" + randomDefense;
+	currentTest.scored = false;
+
+	thead.appendChild(buildHeader([randomDefense])); 
+	tbody.appendChild(buildRow(randomAttack, [randomDefense])); 
+}
+
+export function generateDualCell() {
+	const randomDualCell = getWeightedRandom("cellDual", allDualCells).split("_");
+	const randomAttack = randomDualCell[0];
+	const randomDefense1 = randomDualCell[1];
+	const randomDefense2 = randomDualCell[2];
+
+	currentTest.mode = "cellDual";
+	currentTest.key = randomAttack + "_" + randomDefense1 + "_" + randomDefense2;
+	currentTest.scored = false;
+
+	thead.appendChild(buildHeader([randomDefense1, randomDefense2])); 
+	tbody.appendChild(buildRow(randomAttack, [randomDefense1, randomDefense2], true));
 }
 
 export function validateAnswers() {
 	const tds = document.querySelectorAll("td");
+	let correctCount = 0;
 	tds.forEach((td) => {
 		const attack = td.getAttribute("data-row");
 		const defense = td.getAttribute("data-col");
-		if (multipliers[attack][defense] === td.getAttribute("data-value")) {
+		const isDual = td.getAttribute("data-dual") === "true";
+		
+		let expectedMultiplier;
+		if (isDual) {
+			const defense2 = td.getAttribute("data-col-2");
+			const m1 = parseFloat(multipliers[attack][defense]);
+			const m2 = parseFloat(multipliers[attack][defense2]);
+			expectedMultiplier = (m1 * m2).toString();
+		} else {
+			expectedMultiplier = multipliers[attack][defense];
+		}
+
+		const userValue = td.getAttribute("data-value");
+		const valToCompare = userValue === "blank" ? "1" : userValue;
+
+		if (expectedMultiplier === valToCompare) {
 			td.textContent = "✅";
-			td.removeEventListener("click", onClick);
+			td.setAttribute("data-locked", "true");
+			correctCount++;
+		} else {
+			td.textContent = "❌";
 		}
 	});
+
+	if (currentTest.mode && !currentTest.scored && tds.length > 0) {
+		currentTest.scored = true;
+		const score = correctCount / tds.length;
+		const currentWeight = weights[currentTest.mode][currentTest.key] || 10;
+		
+		if (score === 1) {
+			weights[currentTest.mode][currentTest.key] = Math.max(1, currentWeight / 2);
+		} else {
+			const penalty = (1 - score) * 20; 
+			weights[currentTest.mode][currentTest.key] = Math.min(100, currentWeight + penalty);
+		}
+		console.log(`Updated weight for ${currentTest.key} (${currentTest.mode}): ${weights[currentTest.mode][currentTest.key]}`);
+	}
 }
 
-export function createTypeSelector(onSelect) {
-	const select = document.getElementById("type-selector");
+export function createTypeSelector(onSelect, selectorId = "type-selector") {
+	const select = document.getElementById(selectorId);
 	if (!select) return;
 
 	// Populate if empty
@@ -151,22 +314,20 @@ export function createTypeSelector(onSelect) {
 		});
 	}
 	
-	// Ensure we handle change properly. Since we can't easily remove anonymous listeners,
-	// using onchange property is cleaner for this single-purpose element.
 	select.onchange = (e) => onSelect(e.target.value);
 
 	select.disabled = false;
-	select.style.visibility = "visible"; // Ensure it's visible if it was hidden
+	select.style.display = ""; 
 	return select;
 }
 
-export function removeTypeSelector() {
-	const select = document.getElementById("type-selector");
+export function removeTypeSelector(selectorId = "type-selector") {
+	const select = document.getElementById(selectorId);
 	if (select) {
 		select.disabled = true;
-        // Ensure it stays visible but disabled
-        select.style.visibility = "visible";
-        // Reset to "Normal" so it doesn't show previous selection
+        if (selectorId === "type-selector-2") {
+			select.style.display = "none";
+		}
         select.value = "Normal";
 	}
 }

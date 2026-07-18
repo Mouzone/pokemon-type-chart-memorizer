@@ -139,6 +139,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: 4rem;
 }
 
 div#radio-buttons {
@@ -150,6 +151,13 @@ div#table-container {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+table.mode-single-small {
+	margin-right: 36px;
+}
+table.mode-dual-small {
+	margin-right: 0;
 }
 
 table {
@@ -273,8 +281,16 @@ td[data-value="2"] {
 	background-color: var(--super-effective);
 	color: rgb(255, 221, 87);
 }
+td[data-value="4"] {
+	background-color: #2e7d32;
+	color: rgb(255, 221, 87);
+}
 td[data-value="0.5"] {
 	background-color: var(--not-effective);
+	color: rgb(255, 221, 87);
+}
+td[data-value="0.25"] {
+	background-color: #c62828;
 	color: rgb(255, 221, 87);
 }
 td[data-value="0"] {
@@ -297,6 +313,11 @@ td {
 td {
 	border: 1px solid lightgray;
 	overflow: hidden; /* Hide overflow */
+	cursor: pointer;
+}
+
+td[data-locked="true"] {
+	cursor: default;
 }
 
 div#buttons {
@@ -309,7 +330,7 @@ div#buttons {
 
 #reference-link {
 	font-size: 0.9rem;
-	margin-top: 5px;
+	margin-top: 15px; /* Added more distance from Submit button */
 }
 
 #reference-link a {
@@ -331,6 +352,7 @@ div#buttons {
 		min-height: 100dvh;
 		justify-content: flex-start; /* Use auto margins for centering */
 		padding: 1rem 0;
+		gap: 1.5rem;
 	}
 
 	div#buttons {
@@ -362,7 +384,13 @@ div#buttons {
 		margin-bottom: auto;
 	}
 
-	table {
+	div#table-container:has(table.mode-single-small),
+	div#table-container:has(table.mode-dual-small) {
+		display: flex;
+		justify-content: center;
+	}
+
+	table:not(.mode-single-small):not(.mode-dual-small) {
 		margin: 0 auto;
 	}
 

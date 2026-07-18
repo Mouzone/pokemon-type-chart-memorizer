@@ -24,7 +24,7 @@
 		<!-- PWA Meta Tags -->
 		<link rel="manifest" href="manifest.json" />
 		<meta name="theme-color" content="#ffffff" />
-		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<meta name="apple-mobile-web-app-title" content="Type Chart Memorizer" />
 		<link rel="apple-touch-icon" href="icon-192x192.png?v=3" />
@@ -78,7 +78,16 @@
 			/>
 			<label for="cell">Cell</label>
 		</div>
-			<select id="type-selector" disabled></select>
+			<div id="selectors" style="display: flex; flex-direction: column; gap: 0.5em; align-items: center; width: 100%;">
+				<div id="dual-mode-container" style="display: none;">
+					<input type="checkbox" id="dual-mode" />
+					<label for="dual-mode">Dual Type</label>
+				</div>
+				<div style="display: flex; gap: 0.5em; justify-content: center;">
+					<select id="type-selector" disabled></select>
+					<select id="type-selector-2" disabled style="display: none;"></select>
+				</div>
+			</div>
 			<button id="Generate">Generate New</button>
 			<button id="Submit">Submit</button>
 			<footer id="reference-link">
