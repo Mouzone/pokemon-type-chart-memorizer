@@ -1,4 +1,4 @@
-const CACHE_NAME = 'type-chart-v2';
+const CACHE_NAME = 'type-chart-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

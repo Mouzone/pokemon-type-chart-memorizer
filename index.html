@@ -13,13 +13,13 @@
 		/>
 		<link
 			rel="stylesheet"
-			href="style.css"
+			href="style.css?v=4"
 		/>
 		<script
-			src="script.js"
+			src="script.js?v=4"
 			type="module"
 		></script>
-		<link rel="icon" type="image/png" href="favicon.png?v=3">
+		<link rel="icon" type="image/png" href="favicon.png?v=4">
 		
 		<!-- PWA Meta Tags -->
 		<link rel="manifest" href="manifest.json" />
@@ -27,7 +27,7 @@
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<meta name="apple-mobile-web-app-title" content="Type Chart Memorizer" />
-		<link rel="apple-touch-icon" href="icon-192x192.png?v=3" />
+		<link rel="apple-touch-icon" href="icon-192x192.png?v=4" />
 		
 		<!-- Service Worker Registration -->
 		<script>
@@ -76,11 +76,18 @@
 				name="to-display"
 				value="cell"
 			/>
-			<label for="cell">Cell</label>
+			<label for="cell">Cell</label><br />
+			<input
+				type="radio"
+				id="multiplier"
+				name="to-display"
+				value="multiplier"
+			/>
+			<label for="multiplier">Multiplier</label>
 		</div>
-			<div id="selectors" style="display: flex; flex-direction: column; gap: 0.5em; align-items: center; width: 100%;">
-				<div id="dual-mode-container" style="display: none;">
-					<input type="checkbox" id="dual-mode" />
+			<div id="selectors" style="display: flex; flex-direction: column; gap: 0.5em; align-items: center; width: 100%; margin-top: 0; margin-bottom: 8px;">
+				<div id="dual-mode-container" style="opacity: 0.5;">
+					<input type="checkbox" id="dual-mode" disabled />
 					<label for="dual-mode">Dual Type</label>
 				</div>
 				<div style="display: flex; gap: 0.5em; justify-content: center;">
@@ -88,17 +95,24 @@
 					<select id="type-selector-2" disabled style="display: none;"></select>
 				</div>
 			</div>
-			<button id="Generate">Generate New</button>
-			<button id="Submit">Submit</button>
-			<footer id="reference-link">
-				<a href="https://pokemondb.net/type" target="_blank">Reference: Pokémon Database</a>
-			</footer>
+			<div id="action-group" style="display: flex; flex-direction: column; align-items: center; gap: 0.5em;">
+				<button id="Generate">Generate New</button>
+				<button id="Submit">Submit</button>
+				<footer id="reference-link">
+					<a href="https://pokemondb.net/type" target="_blank">Reference: Pokémon Database</a>
+				</footer>
+			</div>
 		</div>
 		<div id="table-container">
 			<table>
 				<thead></thead>
 				<tbody></tbody>
 			</table>
+		</div>
+		<div id="multiplier-mode-container" style="display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; width: 60vw; max-width: 100%;">
+			<div id="multiplier-defense-header" style="display: flex; justify-content: center; margin-bottom: 0.5rem;"></div>
+			<div id="multiplier-target-text" style="text-align: center; margin: 0 0 1rem 0; font-size: 1.5rem; font-weight: bold;"></div>
+			<div id="multiplier-grid"></div>
 		</div>
 		
 	</body>

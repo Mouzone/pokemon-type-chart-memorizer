@@ -9,6 +9,7 @@ import {
 	validateAnswers,
 	createTypeSelector,
 	removeTypeSelector,
+	generateMultiplierChallenge,
 } from "./utility.js";
 
 const buttonsGroup = document.querySelector("div#buttons");
@@ -30,11 +31,34 @@ function renderTable() {
 	
 	clearTable();
 	
+	const tableContainer = document.querySelector("div#table-container");
+	const multiplierContainer = document.getElementById("multiplier-mode-container");
+	
 	if (mode === "column" || mode === "cell") {
-		dualModeContainer.style.display = "block";
+		dualModeContainer.style.visibility = "visible";
+		dualModeContainer.style.opacity = "1";
+		dualModeCheckbox.disabled = false;
 	} else {
-		dualModeContainer.style.display = "none";
+		dualModeContainer.style.visibility = "visible";
+		dualModeContainer.style.opacity = "0.5";
+		dualModeCheckbox.disabled = true;
 	}
+
+	if (mode === "multiplier") {
+		tableContainer.style.display = "none";
+		multiplierContainer.style.display = "flex";
+		removeTypeSelector("type-selector");
+		removeTypeSelector("type-selector-2");
+		dualModeContainer.style.opacity = "0.5";
+		dualModeCheckbox.disabled = true;
+		
+		generateMultiplierChallenge();
+		return;
+	} else {
+		tableContainer.style.display = "flex";
+		multiplierContainer.style.display = "none";
+	}
+	
 	
 	if (mode === "row") {
 		removeTypeSelector("type-selector-2");

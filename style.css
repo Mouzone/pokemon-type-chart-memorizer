@@ -179,9 +179,8 @@ th.corner-cell {
 th[data-type] {
 	font-weight: 450;
 	color: white;
-	width: 35px;
-	height: 35px;
-	padding: 0.5em;
+	width: 40px;
+	height: 40px;
 	box-sizing: border-box;
 	vertical-align: middle;
 }
@@ -304,8 +303,8 @@ td {
 	padding: 4px;
 	margin: 0;
 	/* Default width/height for data cells */
-	width: 35px;
-	height: 35px;
+	width: 40px;
+	height: 40px;
 	box-sizing: border-box;
 	vertical-align: middle;
 }
@@ -418,4 +417,56 @@ div#buttons {
 		width: 100%;
 		text-align: center;
 	}
+}
+
+#multiplier-grid {
+	display: grid;
+	grid-template-columns: repeat(9, 1fr);
+	gap: 10px;
+}
+
+@media (max-width: 900px) {
+	#multiplier-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+.multiplier-type-btn {
+	cursor: pointer;
+	border: 2px solid transparent;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-weight: 450;
+	box-sizing: border-box;
+}
+.multiplier-type-btn.selected {
+	border-color: black;
+}
+.multiplier-type-btn.correct {
+	position: relative;
+}
+.multiplier-type-btn.correct::after {
+	content: "✅";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 20px;
+	pointer-events: none;
+}
+.multiplier-type-btn.incorrect {
+	position: relative;
+}
+.multiplier-type-btn.incorrect::after {
+	content: "❌";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 20px;
+	pointer-events: none;
 }

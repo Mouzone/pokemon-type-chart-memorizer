@@ -36,7 +36,9 @@ export const weights = {
 export const currentTest = {
 	mode: null,
 	key: null,
-	scored: true
+	scored: true,
+	expectedAttacks: [],
+	targetMultipliers: []
 };
 
 function getWeightedRandom(mode, possibleKeys) {
@@ -255,7 +257,194 @@ export function generateDualCell() {
 	tbody.appendChild(buildRow(randomAttack, [randomDefense1, randomDefense2], true));
 }
 
+export function generateMultiplierChallenge() {
+	currentTest.mode = "multiplier";
+	currentTest.scored = false;
+
+	const isDual = Math.random() < 0.5;
+	
+	let def1, def2;
+	if (isDual) {
+		const randomPair = getWeightedRandom("columnDual", allColumnDualPairs).split("_");
+		def1 = randomPair[0];
+		def2 = randomPair[1];
+	} else {
+		def1 = getWeightedRandom("column", types);
+		def2 = null;
+	}
+
+	const key = isDual ? def1 + "_" + def2 : def1;
+	currentTest.key = key;
+
+	const bands = [
+		["0", "0.25", "0.5", "1"],
+		["2", "4"]
+	];
+
+	const targetMultipliers = bands[Math.floor(Math.random() * bands.length)];
+	currentTest.targetMultipliers = targetMultipliers;
+
+	const expectedAttacks = [];
+	types.forEach(attack => {
+		let m;
+		if (isDual) {
+			m = (parseFloat(multipliers[attack][def1]) * parseFloat(multipliers[attack][def2])).toString();
+		} else {
+			m = multipliers[attack][def1];
+		}
+		if (targetMultipliers.includes(m)) {
+			expectedAttacks.push(attack);
+		}
+	});
+	currentTest.expectedAttacks = expectedAttacks;
+
+	// UI Updates
+	const headerContainer = document.getElementById("multiplier-defense-header");
+	if (headerContainer) {
+		headerContainer.replaceChildren();
+		const d1 = document.createElement("div");
+		d1.textContent = def1.slice(0, 3);
+		d1.style.backgroundColor = `var(--type-${def1.toLowerCase()}-color)`;
+		d1.style.color = "white";
+		d1.style.fontWeight = "450";
+		d1.style.width = "40px";
+		d1.style.height = "40px";
+		d1.style.display = "flex";
+		d1.style.alignItems = "center";
+		d1.style.justifyContent = "center";
+		d1.style.boxSizing = "border-box";
+		headerContainer.appendChild(d1);
+
+		if (isDual) {
+			const d2 = document.createElement("div");
+			d2.textContent = def2.slice(0, 3);
+			d2.style.backgroundColor = `var(--type-${def2.toLowerCase()}-color)`;
+			d2.style.color = "white";
+			d2.style.fontWeight = "450";
+			d2.style.width = "40px";
+			d2.style.height = "40px";
+			d2.style.display = "flex";
+			d2.style.alignItems = "center";
+			d2.style.justifyContent = "center";
+			d2.style.boxSizing = "border-box";
+			headerContainer.appendChild(d2);
+		}
+	}
+
+	const title = document.getElementById("multiplier-target-text");
+	if (title) {
+		title.replaceChildren();
+		title.style.display = "flex";
+		title.style.gap = "10px";
+		title.style.justifyContent = "center";
+		title.style.alignItems = "center";
+
+		targetMultipliers.forEach(m => {
+			const span = document.createElement("div");
+			
+			let displayStr = m;
+			if (m === "0.5") displayStr = "½";
+			if (m === "0.25") displayStr = "¼";
+			
+			span.textContent = displayStr;
+			span.style.display = "flex";
+			span.style.alignItems = "center";
+			span.style.justifyContent = "center";
+			span.style.width = "50px";
+			span.style.height = "35px";
+			span.style.border = "1px solid lightgray";
+			span.style.fontWeight = "bold";
+			span.style.fontSize = "1rem";
+			
+			if (m === "2") {
+				span.style.backgroundColor = "var(--super-effective)";
+				span.style.color = "rgb(255, 221, 87)";
+			} else if (m === "4") {
+				span.style.backgroundColor = "#2e7d32";
+				span.style.color = "rgb(255, 221, 87)";
+			} else if (m === "0.5") {
+				span.style.backgroundColor = "var(--not-effective)";
+				span.style.color = "rgb(255, 221, 87)";
+			} else if (m === "0.25") {
+				span.style.backgroundColor = "#c62828";
+				span.style.color = "rgb(255, 221, 87)";
+			} else if (m === "0") {
+				span.style.backgroundColor = "var(--immune)";
+				span.style.color = "rgb(255, 221, 87)";
+			} else if (m === "1") {
+				span.style.backgroundColor = "white";
+				span.style.color = "#333";
+			}
+
+			title.appendChild(span);
+		});
+	}
+
+	const grid = document.getElementById("multiplier-grid");
+	if (grid) {
+		grid.replaceChildren();
+		types.forEach(attack => {
+			const btn = document.createElement("div");
+			btn.textContent = attack.slice(0, 3);
+			btn.className = "multiplier-type-btn";
+			btn.setAttribute("data-type", attack);
+			btn.style.backgroundColor = `var(--type-${attack.toLowerCase()}-color)`;
+			btn.onclick = () => {
+				if (currentTest.scored) return;
+				btn.classList.toggle("selected");
+			};
+			grid.appendChild(btn);
+		});
+	}
+}
+
 export function validateAnswers() {
+	if (currentTest.mode === "multiplier") {
+		const grid = document.getElementById("multiplier-grid");
+		if (!grid) return;
+		
+		const buttons = grid.querySelectorAll(".multiplier-type-btn");
+		let correctCount = 0;
+		let falsePositives = 0;
+
+		buttons.forEach(btn => {
+			const type = btn.getAttribute("data-type");
+			const isSelected = btn.classList.contains("selected");
+			const isExpected = currentTest.expectedAttacks.includes(type);
+
+			if (isSelected && isExpected) {
+				btn.classList.add("correct");
+				correctCount++;
+			} else if (isSelected && !isExpected) {
+				btn.classList.add("incorrect");
+				falsePositives++;
+			} else if (!isSelected && isExpected) {
+				btn.classList.add("missed");
+			}
+		});
+
+		if (!currentTest.scored) {
+			currentTest.scored = true;
+			const totalExpected = currentTest.expectedAttacks.length;
+			let score = 1;
+			if (totalExpected > 0) {
+				score = Math.max(0, (correctCount - falsePositives) / totalExpected);
+			} else {
+				score = (falsePositives === 0) ? 1 : 0;
+			}
+			
+			const currentWeight = weights[currentTest.mode]?.[currentTest.key] || 10;
+			if (!weights[currentTest.mode]) weights[currentTest.mode] = {};
+			if (score === 1) {
+				weights[currentTest.mode][currentTest.key] = Math.max(1, currentWeight / 2);
+			} else {
+				const penalty = (1 - score) * 20; 
+				weights[currentTest.mode][currentTest.key] = Math.min(100, currentWeight + penalty);
+			}
+		}
+		return;
+	}
+
 	const tds = document.querySelectorAll("td");
 	let correctCount = 0;
 	tds.forEach((td) => {
@@ -318,6 +507,8 @@ export function createTypeSelector(onSelect, selectorId = "type-selector") {
 
 	select.disabled = false;
 	select.style.display = ""; 
+	select.style.visibility = "visible";
+	select.style.opacity = "1";
 	return select;
 }
 
@@ -325,9 +516,9 @@ export function removeTypeSelector(selectorId = "type-selector") {
 	const select = document.getElementById(selectorId);
 	if (select) {
 		select.disabled = true;
-        if (selectorId === "type-selector-2") {
-			select.style.display = "none";
-		}
+		select.style.display = "";
+		select.style.visibility = "visible";
+		select.style.opacity = "0.5";
         select.value = "Normal";
 	}
 }
